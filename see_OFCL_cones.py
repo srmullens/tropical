@@ -1,3 +1,10 @@
+##############################################################################
+#                                                                            #
+# Lets you view the operational cone data for a particular tropical cyclone. #
+#   Or, you can view the CARQ data instead.                                  #
+#                                                                            #
+# Code by Stephen Mullens. April 2020.                                       #
+##############################################################################
 import tropycal.tracks as tracks
 
 # Which storm do you want to see?
