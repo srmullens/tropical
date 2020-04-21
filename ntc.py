@@ -1,3 +1,20 @@
+###################################################################################
+#                                                                                 #
+# Calculates the Net Tropical Cyclone (NTC) activity from each year.              #
+#   ACE - Calculates the accumulated cyclone energy using revised data.           #
+#   OFCL_ACE - Calculates ACE using operational cone information.                 #
+#   NTC - Calculates net tropical cyclone activity normalized by 1950-2000 years. #
+#   OFCL_NTC - Calculates NTC using operational cone information.                 #
+#                                                                                 #
+# Code includes calculations of 1950-1990 averages that could be used for NTC.    #
+#   It might be weird to calculate NTCs in the 1990s using data through 2000.     #
+#   Or, you might want all years to be on equal footing knowing what we know now. #
+#   It's up to you. But you'll have to adjust the code to make that work.         #
+#                                                                                 #
+# Code by Stephen Mullens. April 2020.                                            #
+###################################################################################
+ 
+
 import tropycal.tracks as tracks
 from tropycal.tracks.tools import *
 import numpy as np
@@ -574,11 +591,14 @@ for i,yr in enumerate(tc_storms):
     NTC_40 = NTC_40 * 100
     if int(yr['year'])>no_OFCL: NTC_OFCL = NTC_OFCL * 100
 
-    # Add NTC to dictionary.
-    tc_storms[i].update( {'NTC_old':0} )
+    ### Add NTC to dictionary.                          
+    # If you want all years normalized by 1950-2000, use this line.
     tc_storms[i].update( {'NTC_50':NTC_50} )
+                          
+    # If you want some years normalized by 1950-1990, others by 1950-2000, use these lines.
     #if int(yr['year'])>2001: tc_storms[i].update( {'NTC_50':NTC_50} )
     #else:               tc_storms[i].update( {'NTC_50':NTC_40} )
+                          
     if int(yr['year'])>no_OFCL: tc_storms[i].update( {'NTC_OFCL':NTC_OFCL} )
     else: tc_storms[i].update( {'NTC_OFCL':0} )
 
@@ -588,8 +608,10 @@ for i,yr in enumerate(tc_storms):
 # Step 4:
 # Output results
 #
+                          
+print("year,ACE,NTC_50")                          
 #print("year,ACE,OFCL_ACE,NTC_50,NTC_OFCL")
-print("year,ACE,NTC_50")
+
 for yr in tc_storms:
     if int(yr['year'])>=start_printing:
         print(f"{yr['year']},{yr['ACE']:.1f},{yr['NTC_50']:.1f}")
@@ -608,5 +630,3 @@ if tsec>60:
     print(f"--> Completed code ({tmin:.0f}:{tsec:.2f} minutes)")
 else:
     print(f"--> Completed code ({tsec:2f} seconds)")
-
-
